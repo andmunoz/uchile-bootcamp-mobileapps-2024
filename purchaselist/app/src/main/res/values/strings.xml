@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Purchase List</string>
+    <string name="purchase_list_name">Nombre de la Lista</string>
 </resources>
