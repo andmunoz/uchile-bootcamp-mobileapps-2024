@@ -1,1 +1,1 @@
-# uchile-bootcamp-mobileapps-2024
+# Bootcamp Aplicaciones Móviles 2024
