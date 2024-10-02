@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Jalisco</string>
+    <string name="welcome_message">Bienvenido a mi juego. Debes ingresar un número entre 1 y 100. No hagas trampa.</string>
+    <string name="your_number_hint">Tu número</string>
+    <string name="play_button">Jugar</string>
+    <string name="name_hint">Tu nombre</string>
+    <string name="next_button">Siguiente</string>
+    <string name="quit_button">Salir</string>
+</resources>

@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Mi Lista de Compras</string>
+    <string name="next_button">Siguiente</string>
+    <string name="name_hint">Tu Nombre</string>
+    <string name="create_purchase_list_title">Crear Lista de Compras</string>
+    <string name="purchase_list_name_hint">Nombre Lista de Compras</string>
+    <string name="purchase_list_date_hint">Fecha de Compra</string>
+    <string name="purchase_period_hint">Periodo de Compra</string>
+    <string name="save_button">Guardar</string>
+    <string name="create_button">Crear Lista</string>
+</resources>
