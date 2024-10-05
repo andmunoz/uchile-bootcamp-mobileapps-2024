@@ -8,4 +8,6 @@
     <string name="purchase_period_hint">Periodo de Compra</string>
     <string name="save_button">Guardar</string>
     <string name="create_button">Crear Lista</string>
+    <string name="add_product_button">Agregar Producto</string>
+    <string name="add_products_button">Productos</string>
 </resources>

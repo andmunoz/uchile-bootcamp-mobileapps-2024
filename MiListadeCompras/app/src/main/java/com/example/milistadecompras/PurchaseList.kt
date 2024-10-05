@@ -1,8 +1,13 @@
 package com.example.milistadecompras
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -33,6 +38,10 @@ class PurchaseList : AppCompatActivity() {
             insets
         }
 
+        // Obtención del nombre de usuario de la actividad anterior
+        val username = intent.getStringExtra("username")
+        Toast.makeText(this, "Bienvenido, $username", Toast.LENGTH_LONG).show()
+
         // Obtención del RecyclerView
         recyclerView = findViewById(R.id.purchase_list_recycler)
 
@@ -41,12 +50,37 @@ class PurchaseList : AppCompatActivity() {
         recyclerView.layoutManager = layoutManager
 
         // Inicialización de la lista de elementos
-        itemList = listOf()
-        adapter = PurchaseListAdapter(itemList)
+        adapter = PurchaseListAdapter(listOf())
         recyclerView.adapter = adapter
+    }
 
-        // Obtención del nombre de usuario de la actividad anterior
-        val username = intent.getStringExtra("username")
-        Toast.makeText(this, "Bienvenido, $username", Toast.LENGTH_LONG).show()
+    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            result: ActivityResult ->
+        if (result.resultCode == RESULT_OK) {
+            // Se obtiene el resultado de la actividad anterior
+            val data = result.data
+
+            // Si el resultado es OK, se obtiene el nombre de la lista de compras
+            val purchaseListName = data?.getStringExtra("purchaseListName")
+            val purchaseListDate = data?.getStringExtra("purchaseListDate")
+            val purchaseListPeriod = data?.getStringExtra("purchaseListPeriod")
+
+            // Se crea un nuevo elemento de la lista de compras
+            val newPurchaseList = PurchaseListItem(purchaseListName, purchaseListDate, purchaseListPeriod)
+
+            // Se notifica al adaptador de que se ha insertado un nuevo elemento
+            adapter.addItem(newPurchaseList)
+            adapter.notifyItemInserted(adapter.itemCount - 1)
+
+            Toast.makeText(this, "Lista de compras creada: $purchaseListName", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    fun onAddButtonClick(view: View) {
+        // Se crea un intent para iniciar la actividad de creación de lista de compras
+        val intent = Intent(this, PurchaseListCreate::class.java)
+
+        // Se inicia la actividad de creación de lista de compras
+        startForResult.launch(intent)
     }
 }

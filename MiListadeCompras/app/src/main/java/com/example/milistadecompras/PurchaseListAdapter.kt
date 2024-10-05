@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class PurchaseListAdapter(val itemList: List<PurchaseListItem>) :
+class PurchaseListAdapter(var itemList: List<PurchaseListItem>) :
     // Clase adapter para el RecyclerView
     RecyclerView.Adapter<PurchaseListAdapter.MyViewHolder>() {
         // Clase interna para el ViewHolder
@@ -30,4 +30,10 @@ class PurchaseListAdapter(val itemList: List<PurchaseListItem>) :
 
         // Devuelve el número de elementos en la lista
         override fun getItemCount() = itemList.size
+
+        // Agrega un nuevo elemento a la lista
+        fun addItem(item: PurchaseListItem) {
+            itemList += item
+            notifyItemInserted(getItemCount() - 1)
+        }
     }
