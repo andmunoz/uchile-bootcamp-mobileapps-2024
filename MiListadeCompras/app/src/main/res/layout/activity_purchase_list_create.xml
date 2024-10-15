@@ -9,7 +9,6 @@
 
     <EditText
         android:id="@+id/purchaseNameEditText"
-        style="@style/CustomFormField"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="12dp"
@@ -25,7 +24,6 @@
 
     <EditText
         android:id="@+id/purchaseDateEditText"
-        style="@style/CustomFormField"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="12dp"
@@ -41,7 +39,6 @@
 
     <EditText
         android:id="@+id/purchasePeriodEditText"
-        style="@style/CustomFormField"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="12dp"
