@@ -9,6 +9,7 @@
 
     <EditText
         android:id="@+id/purchaseNameEditText"
+        style="@style/CustomFormField"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="12dp"
@@ -18,13 +19,13 @@
         android:ems="10"
         android:hint="@string/purchase_list_name_hint"
         android:inputType="text"
-        android:textColorHint="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/purchaseDateEditText"
+        style="@style/CustomFormField"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="12dp"
@@ -34,13 +35,13 @@
         android:ems="10"
         android:hint="@string/purchase_list_date_hint"
         android:inputType="date"
-        android:textColorHint="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/purchaseNameEditText" />
 
     <EditText
         android:id="@+id/purchasePeriodEditText"
+        style="@style/CustomFormField"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="12dp"
@@ -50,13 +51,13 @@
         android:ems="10"
         android:hint="@string/purchase_period_hint"
         android:inputType="text"
-        android:textColorHint="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/purchaseDateEditText" />
 
     <Button
         android:id="@+id/saveButton"
+        style="@style/PrimaryButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -89,6 +90,7 @@
 
     <Button
         android:id="@+id/products_button"
+        style="@style/SecondaryButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CustomButton" parent="Theme.MaterialComponents">
+        <item name="android:textSize">@dimen/button_text_size</item>
+    </style>
+    <style name="PrimaryButton" parent="CustomButton">
+        <item name="android:background">@color/md_theme_primary</item>
+        <item name="android:textColor">@color/md_theme_onPrimary</item>
+    </style>
+    <style name="SecondaryButton" parent="CustomButton">
+        <item name="android:background">@color/md_theme_secondary</item>
+        <item name="android:textColor">@color/md_theme_onSecondary</item>
+    </style>
+</resources>
