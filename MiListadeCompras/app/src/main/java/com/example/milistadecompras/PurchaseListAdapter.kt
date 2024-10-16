@@ -1,5 +1,6 @@
 package com.example.milistadecompras
 
+import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +11,22 @@ class PurchaseListAdapter(var itemList: List<PurchaseListItem>) :
     // Clase adapter para el RecyclerView
     RecyclerView.Adapter<PurchaseListAdapter.MyViewHolder>() {
         // Clase interna para el ViewHolder
-        class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        class MyViewHolder(itemView: View) :
+            RecyclerView.ViewHolder(itemView), View.OnCreateContextMenuListener {
             val purchaseListName: TextView = itemView.findViewById(R.id.purchase_list_name)
             val purchaseListDate: TextView = itemView.findViewById(R.id.purchase_list_date)
+
+            // Inicializa el listener para el menú de contexto
+            init {
+                itemView.setOnCreateContextMenuListener(this)
+            }
+
+            // Implementa el método para el menú de contexto
+            override fun onCreateContextMenu(
+                menu: ContextMenu?,
+                v: View?,
+                menuInfo: ContextMenu.ContextMenuInfo?
+            ) { }
         }
 
         // Crea el ViewHolder
@@ -35,5 +49,10 @@ class PurchaseListAdapter(var itemList: List<PurchaseListItem>) :
         fun addItem(item: PurchaseListItem) {
             itemList += item
             notifyItemInserted(getItemCount() - 1)
+        }
+
+        // Obtiene un elemento de la lista
+        fun getItem(position: Int): PurchaseListItem {
+            return itemList[position]
         }
     }

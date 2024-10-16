@@ -2,6 +2,7 @@ package com.example.milistadecompras
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
 import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
@@ -9,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         // Llama al onCreate de AppCompatActivity
         super.onCreate(savedInstanceState)

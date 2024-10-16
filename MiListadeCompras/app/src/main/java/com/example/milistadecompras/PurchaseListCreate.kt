@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
-class PurchaseListCreate : AppCompatActivity() {
+class PurchaseListCreate : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         // Llama al onCreate de AppCompatActivity
         super.onCreate(savedInstanceState)
@@ -30,9 +30,6 @@ class PurchaseListCreate : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        val commonTitleTextView = findViewById<TextView>(R.id.common_title_textview)
-        commonTitleTextView.text = "Crear Lista de Compras"
     }
 
     fun onSaveButtonClick(view: View) {

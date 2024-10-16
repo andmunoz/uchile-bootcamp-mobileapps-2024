@@ -10,4 +10,14 @@
     <string name="create_button">Crear Lista</string>
     <string name="add_product_button">Agregar Producto</string>
     <string name="add_products_button">Productos</string>
+    <string name="setup_item">Configuración</string>
+    <string name="help_item">Ayuda</string>
+    <string name="support_item">Soporte</string>
+    <string name="contact_item">Contacto</string>
+    <string name="dark_theme_switch">Tema Oscuro</string>
+    <string name="home_item">Inicio</string>
+    <string name="search_item">Buscar</string>
+    <string name="profile_item">Perfil</string>
+    <string name="edit_item">Modificar</string>
+    <string name="delete_item">Eliminar</string>
 </resources>
