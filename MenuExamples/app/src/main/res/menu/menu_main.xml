@@ -3,17 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_settings"
-        android:title="Settings"
+        android:title="Share"
         android:icon="@android:drawable/ic_menu_share"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_settings2"
-        android:title="Settings 2"
+        android:title="Search"
         android:icon="@android:drawable/ic_menu_search"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_settings4"
-        android:title="Settings 4"
+        android:title="Settings"
         android:icon="@android:drawable/ic_menu_preferences"
         app:showAsAction="never" />
     <item
