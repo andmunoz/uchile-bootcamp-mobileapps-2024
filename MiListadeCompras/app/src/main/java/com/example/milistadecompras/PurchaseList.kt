@@ -10,7 +10,7 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -41,9 +41,9 @@ class PurchaseList : BaseActivity() {
             insets
         }
 
-        // Obtención del nombre de usuario de la actividad anterior
-        val username = intent.getStringExtra("username")
-        Toast.makeText(this, "Bienvenido, $username", Toast.LENGTH_LONG).show()
+        // Inflamos el Toolbar y el Bottom Navigation
+        super.inflateToolbar()
+        super.inflateBottomNavigationMenu()
 
         // Obtención del RecyclerView
         recyclerView = findViewById(R.id.purchase_list_recycler)
@@ -58,29 +58,6 @@ class PurchaseList : BaseActivity() {
 
         // Registro del menú de contexto
         registerForContextMenu(recyclerView)
-
-        // Inicialización del Bottom Navigation Menu
-        val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottomNavigationView)
-        bottomNavigationView.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.bottom_nav_home -> {
-                    Toast.makeText(this, "Inicio", Toast.LENGTH_SHORT).show()
-                    true
-                }
-                R.id.bottom_nav_search -> {
-                    Toast.makeText(this, "Buscar", Toast.LENGTH_SHORT).show()
-                    true
-                }
-                R.id.bottom_nav_profile -> {
-                    Toast.makeText(this, "Perfil", Toast.LENGTH_SHORT).show()
-                    true
-                }
-                else -> {
-                    Log.e("PurchaseList", "Item de menú no reconocido: ${item.itemId}")
-                    false
-                }
-            }
-        }
     }
 
     private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {

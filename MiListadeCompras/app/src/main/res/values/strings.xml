@@ -20,4 +20,8 @@
     <string name="profile_item">Perfil</string>
     <string name="edit_item">Modificar</string>
     <string name="delete_item">Eliminar</string>
+    <string name="my_profile_label">Mi Perfil</string>
+    <string name="my_lists_label">Mis Listas</string>
+    <string name="sync_label">Sincronizar</string>
+    <string name="notifications_label">Notificaciones</string>
 </resources>

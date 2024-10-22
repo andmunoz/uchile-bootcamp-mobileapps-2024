@@ -9,23 +9,8 @@
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/app_bar_switch"
-        android:title="@string/dark_theme_switch"
-        app:actionLayout="@layout/switch_item"
+        android:id="@+id/app_bar_my_profile"
+        android:icon="@drawable/ic_my_profile"
+        android:title="@string/my_profile_label"
         app:showAsAction="always" />
-    <item
-        android:id="@+id/app_bar_setup"
-        android:title="@string/setup_item" />
-    <item
-        android:id="@+id/app_bar_help"
-        android:title="@string/help_item">
-        <menu>
-            <item
-                android:id="@+id/app_bar_help_support"
-                android:title="@string/support_item" />
-            <item
-                android:id="@+id/app_bar_help_contact"
-                android:title="@string/contact_item" />
-        </menu>
-    </item>
 </menu>

@@ -2,15 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/bottom_nav_home"
-        android:icon="@android:drawable/ic_menu_mylocation"
-        android:title="@string/home_item" />
+        android:id="@+id/bottom_nav_my_lists"
+        android:icon="@android:drawable/ic_menu_agenda"
+        android:title="@string/my_lists_label" />
     <item
-        android:id="@+id/bottom_nav_search"
-        android:icon="@android:drawable/ic_menu_search"
-        android:title="@string/search_item" />
+        android:id="@+id/bottom_nav_sync"
+        android:icon="@android:drawable/ic_menu_rotate"
+        android:title="@string/sync_label" />
     <item
-        android:id="@+id/bottom_nav_profile"
-        android:icon="@android:drawable/ic_dialog_info"
-        android:title="@string/profile_item" />
+        android:id="@+id/bottom_nav_notifications"
+        android:icon="@android:drawable/ic_popup_reminder"
+        android:title="@string/notifications_label" />
 </menu>

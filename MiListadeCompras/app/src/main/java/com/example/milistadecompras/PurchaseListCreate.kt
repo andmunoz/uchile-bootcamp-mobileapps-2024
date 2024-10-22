@@ -30,6 +30,10 @@ class PurchaseListCreate : BaseActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        // Inflamos el Toolbar y el Bottom Navigation
+        super.inflateToolbar()
+        super.inflateBottomNavigationMenu()
     }
 
     fun onSaveButtonClick(view: View) {
