@@ -1,8 +1,8 @@
-package com.example.milistadecompras
+package com.example.milistadecompras.activities
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.ContextMenu
 import android.view.MenuItem
 import android.view.View
@@ -10,12 +10,14 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.milistadecompras.adapter.PurchaseListAdapter
+import com.example.milistadecompras.R
+import com.example.milistadecompras.data.PurchaseListItem
+import com.example.milistadecompras.openhelper.PurchaseListOpenHelper
 
 class PurchaseList : BaseActivity() {
     // Declaración de variables
@@ -60,26 +62,29 @@ class PurchaseList : BaseActivity() {
         registerForContextMenu(recyclerView)
     }
 
-    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            result: ActivityResult ->
-        if (result.resultCode == RESULT_OK) {
-            // Se obtiene el resultado de la actividad anterior
-            val data = result.data
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onResume() {
+        super.onResume()
 
-            // Si el resultado es OK, se obtiene el nombre de la lista de compras
-            val purchaseListName = data?.getStringExtra("purchaseListName")
-            val purchaseListDate = data?.getStringExtra("purchaseListDate")
-            val purchaseListPeriod = data?.getStringExtra("purchaseListPeriod")
+        val dbHelper = PurchaseListOpenHelper(this)
+        val db = dbHelper.readableDatabase
 
-            // Se crea un nuevo elemento de la lista de compras
-            val newPurchaseList = PurchaseListItem(purchaseListName, purchaseListDate, purchaseListPeriod)
-
-            // Se notifica al adaptador de que se ha insertado un nuevo elemento
-            adapter.addItem(newPurchaseList)
-            adapter.notifyItemInserted(adapter.itemCount - 1)
-
-            Toast.makeText(this, "Lista de compras creada: $purchaseListName", Toast.LENGTH_LONG).show()
+        val cursor = db.query("purchase_list", null, null, null, null, null, "name")
+        itemList = mutableListOf()
+        with(cursor) {
+            while (moveToNext()) {
+                val name = getString(1)
+                val date = getString(2)
+                val period = getString(3)
+                itemList += PurchaseListItem(name, date, period)
+            }
         }
+        cursor.close()
+        db.close()
+
+        adapter.clear()
+        adapter.itemList = itemList
+        adapter.notifyDataSetChanged()
     }
 
     fun onAddButtonClick(view: View) {
@@ -87,7 +92,7 @@ class PurchaseList : BaseActivity() {
         val intent = Intent(this, PurchaseListCreate::class.java)
 
         // Se inicia la actividad de creación de lista de compras
-        startForResult.launch(intent)
+        startActivity(intent)
     }
 
     override fun onCreateContextMenu(

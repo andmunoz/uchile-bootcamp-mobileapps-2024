@@ -1,17 +1,17 @@
-package com.example.milistadecompras
+package com.example.milistadecompras.activities
 
+import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewStub
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.milistadecompras.R
+import com.example.milistadecompras.openhelper.PurchaseListOpenHelper
 
 class PurchaseListCreate : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,15 +42,19 @@ class PurchaseListCreate : BaseActivity() {
         val purchaseListDate = findViewById<EditText>(R.id.purchaseDateEditText).text.toString()
         val purchaseListPeriod = findViewById<EditText>(R.id.purchasePeriodEditText).text.toString()
 
-        // Prepara el intent para devolver los valores ingresados
-        val resultIntent = Intent().apply {
-            putExtra("purchaseListName", purchaseListName)
-            putExtra("purchaseListDate", purchaseListDate)
-            putExtra("purchaseListPeriod", purchaseListPeriod)
-        }
+        // Guardar en la base de datos
+        val dbHelper = PurchaseListOpenHelper(this)
+        val db = dbHelper.writableDatabase
 
-        // Establece el resultado de la actividad y finaliza la actividad
-        setResult(RESULT_OK, resultIntent)
+        // Inserta los valores en la base de datos
+        val values = ContentValues().apply {
+            put("name", purchaseListName)
+            put("date", purchaseListDate)
+            put("period", purchaseListPeriod)
+        }
+        db.insert("purchase_list", null, values)
+        db.close()
+
         finish()
     }
 

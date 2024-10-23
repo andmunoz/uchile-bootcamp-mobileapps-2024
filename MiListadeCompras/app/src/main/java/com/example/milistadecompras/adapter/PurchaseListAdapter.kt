@@ -1,4 +1,4 @@
-package com.example.milistadecompras
+package com.example.milistadecompras.adapter
 
 import android.view.ContextMenu
 import android.view.LayoutInflater
@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.milistadecompras.R
+import com.example.milistadecompras.data.PurchaseListItem
 
 class PurchaseListAdapter(var itemList: List<PurchaseListItem>) :
     // Clase adapter para el RecyclerView
@@ -54,5 +56,11 @@ class PurchaseListAdapter(var itemList: List<PurchaseListItem>) :
         // Obtiene un elemento de la lista
         fun getItem(position: Int): PurchaseListItem {
             return itemList[position]
+        }
+
+        // Limpia el contenido de la lista
+        fun clear() {
+            itemList = emptyList()
+            notifyDataSetChanged()
         }
     }
