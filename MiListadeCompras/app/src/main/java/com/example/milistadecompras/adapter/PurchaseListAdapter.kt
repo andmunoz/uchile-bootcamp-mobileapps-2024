@@ -34,7 +34,7 @@ class PurchaseListAdapter(var itemList: List<PurchaseListItem>) :
         // Crea el ViewHolder
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
             val itemView = LayoutInflater.from(parent.context)
-                .inflate(R.layout.lista_de_compras, parent, false)
+                .inflate(R.layout.purchase_list_item, parent, false)
             return MyViewHolder(itemView)
         }
 
