@@ -43,7 +43,7 @@ class PurchaseListActivity : BaseActivity() {
         menuInflater.inflate(R.menu.list_purchase_context_menu, menu)
     }
 
-    fun onAddButtonClick(view: View) {
+    fun onAddButtonClick(view: View) : Unit {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, PurchaseListDetailFragment()).commit()
     }

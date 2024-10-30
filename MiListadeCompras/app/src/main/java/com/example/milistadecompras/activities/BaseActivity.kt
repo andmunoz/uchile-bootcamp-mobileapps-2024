@@ -21,21 +21,26 @@ abstract class BaseActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
     }
 
+    fun onMyListButtonSelected() {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, PurchaseListFragment()).commit()
+    }
+
     fun inflateBottomNavigationMenu() {
         // Inicialización del Bottom Navigation Menu
         val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottom_navigation_view)
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.bottom_nav_my_lists -> {
-                    Toast.makeText(this, "Inicio", Toast.LENGTH_SHORT).show()
+                    onMyListButtonSelected()
                     true
                 }
                 R.id.bottom_nav_sync -> {
-                    Toast.makeText(this, "Buscar", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Sync started!", Toast.LENGTH_SHORT).show()
                     true
                 }
                 R.id.bottom_nav_notifications -> {
-                    Toast.makeText(this, "Perfil", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Show notifications", Toast.LENGTH_SHORT).show()
                     true
                 }
                 else -> {

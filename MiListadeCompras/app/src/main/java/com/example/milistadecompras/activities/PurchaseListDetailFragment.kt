@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import com.example.milistadecompras.R
 import com.example.milistadecompras.openhelper.PurchaseListOpenHelper
 
@@ -76,6 +77,9 @@ class PurchaseListDetailFragment : Fragment() {
         }
         db.insert("purchase_list", null, values)
         db.close()
+
+        // Información al usuario
+        Toast.makeText(this.context, "Lista de compras ${purchaseListName.text} creada exitosamente", Toast.LENGTH_SHORT).show()
     }
 
     companion object {
