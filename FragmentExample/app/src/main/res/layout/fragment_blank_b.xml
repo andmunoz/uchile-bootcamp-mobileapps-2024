@@ -6,9 +6,29 @@
     tools:context=".BlankFragmentB">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/helloFragmentB" />
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/fragment_b_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/helloFragmentB" />
+
+        <EditText
+            android:id="@+id/fragment_b_message_box"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="text" />
+
+        <Button
+            android:id="@+id/fragment_b_send_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Button" />
+    </LinearLayout>
 
 </FrameLayout>
