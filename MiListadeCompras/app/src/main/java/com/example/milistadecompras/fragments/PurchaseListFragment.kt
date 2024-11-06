@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.milistadecompras.R
 import com.example.milistadecompras.adapter.PurchaseListAdapter
 import com.example.milistadecompras.data.PurchaseListItem
-import com.example.milistadecompras.openhelper.PurchaseListOpenHelper
+import com.example.milistadecompras.helpers.PurchaseListOpenHelper
 
 /**
  * A simple [Fragment] subclass.
@@ -79,10 +79,12 @@ class PurchaseListFragment : Fragment() {
         itemList = mutableListOf()
         with(cursor) {
             while (moveToNext()) {
+                val id = getInt(0)
                 val name = getString(1)
                 val date = getString(2)
                 val period = getString(3)
-                itemList += PurchaseListItem(name, date, period)
+                val status = getInt(4)
+                itemList += PurchaseListItem(id, name, date, period, status)
             }
         }
         cursor.close()

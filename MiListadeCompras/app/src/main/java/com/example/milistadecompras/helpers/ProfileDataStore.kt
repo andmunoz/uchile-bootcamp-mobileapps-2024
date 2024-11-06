@@ -1,4 +1,4 @@
-package com.example.milistadecompras.openhelper
+package com.example.milistadecompras.helpers
 
 import android.content.Context
 import androidx.datastore.core.DataStore

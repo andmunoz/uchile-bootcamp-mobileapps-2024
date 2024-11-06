@@ -3,8 +3,8 @@
     {
       "id": 1,
       "name": "Monthly Groceries",
-      "last_purchase_date": "2023-10-15",
-      "frequency": "monthly",
+      "date": "2023-10-15",
+      "period": "monthly",
       "products": [
         {
           "id": 101,
@@ -24,13 +24,14 @@
           "price": 2.20,
           "quantity": 1
         }
-      ]
+      ],
+      "status": 0
     },
     {
       "id": 2,
       "name": "Weekly Fruits",
-      "last_purchase_date": "2023-10-10",
-      "frequency": "weekly",
+      "date": "2023-10-10",
+      "period": "weekly",
       "products": [
         {
           "id": 201,
@@ -50,7 +51,8 @@
           "price": 0.60,
           "quantity": 5
         }
-      ]
+      ],
+      "status": 0
     }
   ]
 }

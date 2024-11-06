@@ -1,5 +1,6 @@
 package com.example.milistadecompras.activities
 
+import android.content.ContentValues
 import android.os.Bundle
 import android.util.Log
 import android.view.ContextMenu
@@ -15,9 +16,22 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.FragmentManager
 import com.example.milistadecompras.R
 import com.example.milistadecompras.fragments.PurchaseListDetailFragment
+import com.example.milistadecompras.helpers.PurchaseListOpenHelper
+import com.example.milistadecompras.helpers.WebServiceHelper
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.json.JSONArray
+import org.json.JSONObject
+
+// Declaramos una constante
+const val BASE_URL = "https://ejemplo-firebase-657d0-default-rtdb.firebaseio.com"
 
 class PurchaseListActivity : AppCompatActivity() {
+    private lateinit var webServiceHelper: WebServiceHelper
+
     override fun onCreate(savedInstanceState: Bundle?) {
         // Llamada al método onCreate de AppCompatActivity
         super.onCreate(savedInstanceState)
@@ -38,6 +52,9 @@ class PurchaseListActivity : AppCompatActivity() {
         // Inflamos el Toolbar y el Bottom Navigation
         inflateToolbar()
         inflateBottomNavigationMenu()
+
+        // Inicializamos el WebServiceHelper
+        webServiceHelper = WebServiceHelper(BASE_URL)
     }
 
     // Función para inflar el Toolbar
@@ -90,7 +107,7 @@ class PurchaseListActivity : AppCompatActivity() {
                     true
                 }
                 R.id.bottom_nav_sync -> {
-                    Toast.makeText(this, "Pronto...", Toast.LENGTH_SHORT).show()
+                    syncPurchaseLists()
                     true
                 }
                 R.id.bottom_nav_notifications -> {
@@ -102,6 +119,81 @@ class PurchaseListActivity : AppCompatActivity() {
                     false
                 }
             }
+        }
+    }
+
+    private fun syncPurchaseLists() {
+        Toast.makeText(this, "Sincronizando...", Toast.LENGTH_SHORT).show()
+
+        // Corrutina para sincronizar
+        CoroutineScope(Dispatchers.IO).launch {
+            /* Paso 1: Descargar las listas que no están en el dispositivo */
+            // Descargar las listas existentes en la nube
+            val purchaseLists = webServiceHelper.makeGETRequest("/purchase_lists.json")
+
+            withContext(Dispatchers.Main) {
+                // Validar si tengo resultados
+                if (purchaseLists == null) {
+                    Log.e("PurchaseList", "No hay listas en el servicio")
+                    return@withContext
+                }
+
+                // Procesar las listas descargadas
+                val purchaseListsArray = JSONArray(purchaseLists)
+                for (i in 0 until purchaseListsArray.length()) {
+                    val purchaseList = purchaseListsArray.getJSONObject(i)
+                    val id = purchaseList.getInt("id")
+                    val name = purchaseList.getString("name")
+                    val date = purchaseList.getString("date")
+                    val period = purchaseList.getString("period")
+                    val status = purchaseList.getInt("status")
+
+                    val dbHelper = PurchaseListOpenHelper(this@PurchaseListActivity)
+                    val db = dbHelper.writableDatabase
+
+                    // val cursor = db.query("purchase_list", null, "id = ?", arrayOf(id.toString()), null, null, null)
+
+                    val values = ContentValues().apply {
+                        put("id", id)
+                        put("name", name)
+                        put("date", date)
+                        put("period", period)
+                        put("status", status)
+                    }
+                    db.insert("purchase_list", null, values)
+                    db.close()
+                }
+            }
+
+            /* Paso 2: Subir las listas que NO están actualizadas en la nube */
+            // Obtener las listas de la base de datos
+            val dbHelper = PurchaseListOpenHelper(this@PurchaseListActivity)
+            val db = dbHelper.readableDatabase
+
+            // Hacemos la consulta y la recorremos
+            val cursor = db.query("purchase_list", null, "status = 1", null, null, null, null)
+
+            with(cursor) {
+                while (moveToNext()) {
+                    val id = getInt(0)
+                    val name = getString(1)
+                    val date = getString(2)
+                    val period = getString(3)
+
+                    val purchaseList = JSONObject()
+                    purchaseList.put("id", id)
+                    purchaseList.put("name", name)
+                    purchaseList.put("date", date)
+                    purchaseList.put("period", period)
+                    purchaseList.put("status", 0)
+
+                    webServiceHelper.makePOSTRequest("/purchase_lists.json", purchaseList.toString())
+
+                    db.update("purchase_list", ContentValues().apply { put("status", 0) }, "id = ?", arrayOf(id.toString()))
+                }
+            }
+            cursor.close()
+            db.close()
         }
     }
 

@@ -14,10 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.milistadecompras.R
 import com.example.milistadecompras.adapter.ProductAdapter
-import com.example.milistadecompras.adapter.PurchaseListAdapter
 import com.example.milistadecompras.data.ProductItem
 import com.example.milistadecompras.data.PurchaseListProductItem
-import com.example.milistadecompras.openhelper.PurchaseListOpenHelper
+import com.example.milistadecompras.helpers.PurchaseListOpenHelper
 
 class PurchaseListDetailFragment : Fragment(), ProductFormDialog.OnProductAddedListener {
     // Referencia al contexto de la actividad
@@ -96,6 +95,7 @@ class PurchaseListDetailFragment : Fragment(), ProductFormDialog.OnProductAddedL
             put("name", purchaseListName.text.toString())
             put("date", purchaseListDate.text.toString())
             put("period", purchaseListPeriod.text.toString())
+            put("status", 1)
         }
         db.insert("purchase_list", null, values)
         db.close()

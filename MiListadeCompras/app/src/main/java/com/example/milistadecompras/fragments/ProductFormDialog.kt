@@ -11,7 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.example.milistadecompras.R
 import com.example.milistadecompras.data.ProductItem
-import com.example.milistadecompras.openhelper.PurchaseListOpenHelper
+import com.example.milistadecompras.helpers.PurchaseListOpenHelper
 
 class ProductFormDialog: DialogFragment() {
     // Declaramos una referencia al open helper
