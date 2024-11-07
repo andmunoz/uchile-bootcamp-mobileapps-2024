@@ -1,0 +1,58 @@
+{
+  "purchase_lists": [
+    {
+      "id": 1,
+      "name": "Monthly Groceries",
+      "date": "2023-10-15",
+      "period": "monthly",
+      "products": [
+        {
+          "id": 101,
+          "name": "Milk",
+          "price": 1.50,
+          "quantity": 2
+        },
+        {
+          "id": 102,
+          "name": "Bread",
+          "price": 0.90,
+          "quantity": 3
+        },
+        {
+          "id": 103,
+          "name": "Eggs",
+          "price": 2.20,
+          "quantity": 1
+        }
+      ],
+      "status": 0
+    },
+    {
+      "id": 2,
+      "name": "Weekly Fruits",
+      "date": "2023-10-10",
+      "period": "weekly",
+      "products": [
+        {
+          "id": 201,
+          "name": "Apple",
+          "price": 0.50,
+          "quantity": 10
+        },
+        {
+          "id": 202,
+          "name": "Banana",
+          "price": 0.30,
+          "quantity": 8
+        },
+        {
+          "id": 203,
+          "name": "Orange",
+          "price": 0.60,
+          "quantity": 5
+        }
+      ],
+      "status": 0
+    }
+  ]
+}

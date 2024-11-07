@@ -9,7 +9,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.milistadecompras.R
-import com.example.milistadecompras.openhelper.ProfileDataStore
+import com.example.milistadecompras.helpers.ProfileDataStore
 import kotlinx.coroutines.launch
 import java.lang.Long.parseLong
 

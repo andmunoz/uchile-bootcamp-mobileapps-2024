@@ -15,8 +15,8 @@ class PurchaseListAdapter(var itemList: List<PurchaseListItem>) :
         // Clase interna para el ViewHolder
         class MyViewHolder(itemView: View) :
             RecyclerView.ViewHolder(itemView), View.OnCreateContextMenuListener {
-            val purchaseListName: TextView = itemView.findViewById(R.id.purchase_list_name)
-            val purchaseListDate: TextView = itemView.findViewById(R.id.purchase_list_date)
+            val purchaseListName: TextView = itemView.findViewById(R.id.product_name)
+            val purchaseListDate: TextView = itemView.findViewById(R.id.product_qty)
 
             // Inicializa el listener para el menú de contexto
             init {
@@ -34,7 +34,7 @@ class PurchaseListAdapter(var itemList: List<PurchaseListItem>) :
         // Crea el ViewHolder
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
             val itemView = LayoutInflater.from(parent.context)
-                .inflate(R.layout.lista_de_compras, parent, false)
+                .inflate(R.layout.purchase_list_item, parent, false)
             return MyViewHolder(itemView)
         }
 

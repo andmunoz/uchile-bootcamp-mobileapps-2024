@@ -28,4 +28,7 @@
     <string name="lastNameLabel">Apellido</string>
     <string name="phoneLabel">Teléfono</string>
     <string name="emailLabel">Correo</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="product_qty_hint">Cantidad</string>
 </resources>
