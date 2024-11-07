@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="getter_options">
+        <item>HttpURLConnection</item>
+        <item>Retrofit</item>
+    </string-array>
+</resources>

@@ -1,6 +1,7 @@
 package com.example.servicesexample
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -8,16 +9,18 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.servicesexample.httpurlconnection.WebServiceHelper
+import com.example.servicesexample.retrofit.Post
+import com.example.servicesexample.retrofit.WebServiceController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.BufferedWriter
-import java.io.OutputStreamWriter
-import java.net.HttpURLConnection
-import java.net.URL
+import kotlinx.coroutines.withContext
 
 class NewActivity : AppCompatActivity() {
     // Declaramos los widgets de la vista
+    private lateinit var endpointInput: EditText
+    private lateinit var getterInput: EditText
     private lateinit var titleInput: EditText
     private lateinit var userInput: EditText
     private lateinit var bodyInput: EditText
@@ -38,73 +41,87 @@ class NewActivity : AppCompatActivity() {
         }
 
         // Inicializamos los widgets
+        endpointInput = findViewById(R.id.endpoint_input)
+        getterInput = findViewById(R.id.getter_input)
         titleInput = findViewById(R.id.title_input)
         userInput = findViewById(R.id.user_input)
         bodyInput = findViewById(R.id.body_input)
         saveButton = findViewById(R.id.save_button)
         cancelButton = findViewById(R.id.back_button)
 
+        // Obtenemos los datos del intent
+        val endpoint = intent.getStringExtra("endpoint")
+        endpointInput.setText(endpoint)
+        val getter = intent.getStringExtra("getter")
+        getterInput.setText(getter)
+
         // Configuramos los listeners de los botones
-        saveButton.setOnClickListener { onSaveChanges() }
+        saveButton.setOnClickListener {
+            Toast.makeText(this, "Guardando cambios con ${getterInput.text}", Toast.LENGTH_SHORT).show()
+            if (getterInput.text.toString() == "HttpURLConnection") {
+                onSaveElementWithHttpUrlConnection()
+            } else if (getterInput.text.toString() == "Retrofit") {
+                onSaveElementWithRetrofit()
+            }
+        }
         cancelButton.setOnClickListener { onCancel() }
     }
 
-    private fun sendPUTRequest(title: String, userId: Int, body: String): String {
-        // Crear un objeto JSON con los datos
-        // val endpoint = "https://jsonplaceholder.typicode.com/posts"
-        // val jsonObject = "{\"title\": \"$title\", \"userId\": $userId, \"body\": \"$body\"}"
-        val endpoint = "https://ejemplo-firebase-657d0-default-rtdb.firebaseio.com/purchase_lists.json"
-        val jsonObject = "{\"id\": $userId, \"name\": \"$title\", \"last_purchase_date\": \"2024-10-15\", \"frequency\": \"$body\", \"products\": []}"
-
-        // Crear la conexión HTTP
-        val url = URL(endpoint)
-        val connection = url.openConnection() as HttpURLConnection
-
-        // Configurar la petición HTTP POST
-        connection.requestMethod = "POST"
-        connection.setRequestProperty("Content-Type", "application/json; utf-8")
-        connection.setRequestProperty("Accept", "application/json")
-        connection.doOutput = true
-        connection.connectTimeout = 5000
-        connection.readTimeout = 5000
-
-        try {
-            // Enviar datos al endpoint
-            connection.outputStream.use { outputStream ->
-                BufferedWriter(OutputStreamWriter(outputStream, "UTF-8")).use { writer ->
-                    writer.write(jsonObject)
-                    writer.flush()
-                }
-            }
-
-            // Leer la respuesta del servidor y decidimos que informar al usuario
-            if (connection.responseCode == HttpURLConnection.HTTP_CREATED) {
-                return "Cambios guardados: ${connection.responseCode}"
-            }
-            else {
-                return "Error al guardar los cambios: ${connection.responseCode}"
-            }
-        } finally {
-            connection.disconnect()
-        }
+    fun onCancel() {
+        // Volver a la actividad anterior
+        finish()
     }
 
-    private fun onSaveChanges() {
+    fun onSaveElementWithHttpUrlConnection() {
+        // Creamos y abrimo la conexión al endpoint
+        val endpoint = endpointInput.text.toString()
+        val service = "posts"
+        val webServiceHelper = WebServiceHelper(endpoint)
+
         // Obtener los valores de los campos de entrada
         val title = titleInput.text.toString()
         val userId = userInput.text.toString().toInt()
         val body = bodyInput.text.toString()
 
+        // Crear el objeto JSON
+        val jsonString = """
+            {
+                "title": "$title",
+                "userId": $userId,
+                "body": "$body"
+            }
+        """.trimIndent()
+
         // Enviar los datos al endpoint y mostrar la respuesta de la llamada
         var response = ""
         CoroutineScope(Dispatchers.IO).launch {
-            response = sendPUTRequest(title, userId, body)
+            response = webServiceHelper.sendPUTRequest(endpoint + service, jsonString)
+            Log.d("HttpURLConnection", response)
         }
-        Toast.makeText(this, response, Toast.LENGTH_SHORT).show()
     }
 
-    private fun onCancel() {
-        // Volver a la actividad anterior
-        finish()
+    fun onSaveElementWithRetrofit() {
+        // Creamos y abrimo la conexión al endpoint
+        val endpoint = endpointInput.text.toString()
+        val webServiceController = WebServiceController(endpoint)
+
+        // Obtener los valores de los campos de entrada
+        val title = titleInput.text.toString()
+        val userId = userInput.text.toString().toInt()
+        val body = bodyInput.text.toString()
+
+        // Crear el objeto JSON
+        val post = Post(title, userId, body)
+
+        // Enviar los datos al endpoint y mostrar la respuesta de la llamada
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = webServiceController.createPost(post).toString()
+                Log.d("Retrofit", response)
+            }
+            catch (e: Exception) {
+                Log.d("Retrofit", "Error al procesar el servicio: ${e.message}")
+            }
+        }
     }
 }
