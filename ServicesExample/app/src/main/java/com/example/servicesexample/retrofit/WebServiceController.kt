@@ -19,6 +19,7 @@ class WebServiceController(val baseUrl: String) {
     }
 
     suspend fun getPosts() = webService.getPosts()
+    suspend fun getPost(i: Int) = webService.getPost(i)
     suspend fun createPost(post: Post) = webService.createPost(post)
 }
 

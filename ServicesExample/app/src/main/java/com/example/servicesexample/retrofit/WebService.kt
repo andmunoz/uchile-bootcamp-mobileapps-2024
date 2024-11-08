@@ -9,6 +9,9 @@ interface WebService {
     @GET("posts")
     suspend fun getPosts(): Response<List<Post>>
 
+    @GET("posts/${i}")
+    suspend fun getPost(i: Int): Response<Post>
+
     @POST("posts")
     suspend fun createPost(@Body post: Post): Response<Post>
 }
