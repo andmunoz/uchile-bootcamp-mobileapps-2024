@@ -3,5 +3,6 @@
     <string-array name="getter_options">
         <item>HttpURLConnection</item>
         <item>Retrofit</item>
+        <item>Volley</item>
     </string-array>
 </resources>

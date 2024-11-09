@@ -14,6 +14,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.servicesexample.httpurlconnection.WebServiceHelper
 import com.example.servicesexample.retrofit.WebServiceController
+import com.example.servicesexample.volley.WebServiceQueue
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -62,6 +63,8 @@ class MainActivity : AppCompatActivity() {
                 onLoadFromHttpUrlConnection()
             } else if (selectedOption == "Retrofit") {
                 onLoadFromRetrofit()
+            } else if (selectedOption == "Volley") {
+                onLoadFromVolley()
             }
         }
         newButton.setOnClickListener { onNewElement() }
@@ -123,5 +126,19 @@ class MainActivity : AppCompatActivity() {
                 jsonResponseText.setText("Error al procesar el servicio: ${e.message}")
             }
         }
+    }
+
+    fun onLoadFromVolley() {
+        // Obtenemos la URL del endpoint
+        val endpoint = endpointInput.text.toString()
+        val webServiceQueue = WebServiceQueue(endpoint, this)
+
+        // Ponemos un estado de carga en el texto de respuesta
+        jsonResponseText.setText("Cargando datos de la URL: $endpoint")
+
+        // Llamamos a la función de manera asíncrona para obtener los datos del endpoint
+        webServiceQueue.getData("posts", { response ->
+            jsonResponseText.setText(response)
+        })
     }
 }
