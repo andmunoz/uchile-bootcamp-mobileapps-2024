@@ -3,6 +3,7 @@ package com.example.milistadecompras.fragments
 import android.content.ContentValues
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,12 +16,20 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.milistadecompras.R
 import com.example.milistadecompras.adapter.ProductAdapter
 import com.example.milistadecompras.data.ProductItem
+import com.example.milistadecompras.data.PurchaseListItem
 import com.example.milistadecompras.data.PurchaseListProductItem
 import com.example.milistadecompras.helpers.PurchaseListOpenHelper
+import com.example.milistadecompras.helpers.PurchaseListServiceController
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
+const val BASE_URL = "https://ejemplo-firebase-657d0-default-rtdb.firebaseio.com"
 
 class PurchaseListDetailFragment : Fragment(), ProductFormDialog.OnProductAddedListener {
     // Referencia al contexto de la actividad
     private lateinit var context: Context
+    private lateinit var webServiceController: PurchaseListServiceController
 
     // Referencias a todos los widgets del fragment que requieren uso
     private lateinit var purchaseListName: EditText
@@ -82,6 +91,9 @@ class PurchaseListDetailFragment : Fragment(), ProductFormDialog.OnProductAddedL
         productList.layoutManager = layoutManager
         adapter = ProductAdapter(listOf())
         productList.adapter = adapter
+
+        // Inicializar el WebServiceController
+        webServiceController = PurchaseListServiceController(BASE_URL)
     }
 
     // Función para guardar la lista de compras
@@ -101,6 +113,20 @@ class PurchaseListDetailFragment : Fragment(), ProductFormDialog.OnProductAddedL
         db.close()
 
         // TODO: Falta agregar los productos a la lista de compras al momento de crearla
+
+        // Guardar en la nube
+        CoroutineScope(Dispatchers.IO).launch {
+            val purchaseList = PurchaseListItem(100,
+                purchaseListName.text.toString(),
+                purchaseListDate.text.toString(),
+                purchaseListPeriod.text.toString(),
+                0)
+            val response = webServiceController.createPurchaseList(purchaseList)
+            if (!response.isSuccessful) {
+                Log.e("PurchaseList", "Error al subir la lista: ${response.errorBody()}")
+                return@launch
+            }
+        }
 
         // Información al usuario
         Toast.makeText(

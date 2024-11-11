@@ -36,6 +36,7 @@ class WebServiceQueue(val baseURL: String, val context: Context) {
                 callback(response.toString())
             },
             { error ->
+                Log.e("Volley", error.toString())
                 callback(error.toString())
             }
         )

@@ -15,8 +15,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.FragmentManager
 import com.example.milistadecompras.R
+import com.example.milistadecompras.data.PurchaseListItem
 import com.example.milistadecompras.fragments.PurchaseListDetailFragment
 import com.example.milistadecompras.helpers.PurchaseListOpenHelper
+import com.example.milistadecompras.helpers.PurchaseListServiceController
 import com.example.milistadecompras.helpers.WebServiceHelper
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.CoroutineScope
@@ -31,6 +33,7 @@ const val BASE_URL = "https://ejemplo-firebase-657d0-default-rtdb.firebaseio.com
 
 class PurchaseListActivity : AppCompatActivity() {
     private lateinit var webServiceHelper: WebServiceHelper
+    private lateinit var webServiceController: PurchaseListServiceController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // Llamada al método onCreate de AppCompatActivity
@@ -55,6 +58,7 @@ class PurchaseListActivity : AppCompatActivity() {
 
         // Inicializamos el WebServiceHelper
         webServiceHelper = WebServiceHelper(BASE_URL)
+        webServiceController = PurchaseListServiceController(BASE_URL)
     }
 
     // Función para inflar el Toolbar
@@ -107,7 +111,8 @@ class PurchaseListActivity : AppCompatActivity() {
                     true
                 }
                 R.id.bottom_nav_sync -> {
-                    syncPurchaseLists()
+                    // syncPurchaseListsWithURLConnection()
+                    syncPurchaseListWithRetrofit()
                     true
                 }
                 R.id.bottom_nav_notifications -> {
@@ -122,7 +127,7 @@ class PurchaseListActivity : AppCompatActivity() {
         }
     }
 
-    private fun syncPurchaseLists() {
+    private fun syncPurchaseListsWithURLConnection() {
         Toast.makeText(this, "Sincronizando...", Toast.LENGTH_SHORT).show()
 
         // Corrutina para sincronizar
@@ -188,6 +193,68 @@ class PurchaseListActivity : AppCompatActivity() {
                     purchaseList.put("status", 0)
 
                     webServiceHelper.makePOSTRequest("/purchase_lists.json", purchaseList.toString())
+
+                    db.update("purchase_list", ContentValues().apply { put("status", 0) }, "id = ?", arrayOf(id.toString()))
+                }
+            }
+            cursor.close()
+            db.close()
+        }
+    }
+
+    private fun syncPurchaseListWithRetrofit() {
+        Toast.makeText(this, "Sincronizando...", Toast.LENGTH_SHORT).show()
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val purchaseLists = webServiceController.getPurchaseLists()
+            withContext(Dispatchers.Main) {
+                if (purchaseLists.isSuccessful) {
+                    val purchaseListsArray = JSONArray(purchaseLists.body())
+                    for (i in 0 until purchaseListsArray.length()) {
+                        val purchaseList = purchaseListsArray.getJSONObject(i)
+                        val id = purchaseList.getInt("id")
+                        val name = purchaseList.getString("name")
+                        val date = purchaseList.getString("date")
+                        val period = purchaseList.getString("period")
+                        val status = purchaseList.getInt("status")
+
+                        val dbHelper = PurchaseListOpenHelper(this@PurchaseListActivity)
+                        val db = dbHelper.writableDatabase
+                        val values = ContentValues().apply {
+                            put("id", id)
+                            put("name", name)
+                            put("date", date)
+                            put("period", period)
+                            put("status", status)
+                        }
+                        db.insert("purchase_list", null, values)
+                        db.close()
+                    }
+                }
+            }
+        }
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val dbHelper = PurchaseListOpenHelper(this@PurchaseListActivity)
+            val db = dbHelper.readableDatabase
+
+            // Hacemos la consulta y la recorremos
+            val cursor = db.query("purchase_list", null, "status = 1", null, null, null, null)
+
+            with(cursor) {
+                while (moveToNext()) {
+                    val id = getInt(0)
+                    val name = getString(1)
+                    val date = getString(2)
+                    val period = getString(3)
+
+                    val purchaseList = PurchaseListItem(id, name, date, period, 0)
+
+                    val response = webServiceController.createPurchaseList(purchaseList)
+                    if (!response.isSuccessful) {
+                        Log.e("PurchaseList", "Error al subir la lista: ${response.errorBody()}")
+                        continue
+                    }
 
                     db.update("purchase_list", ContentValues().apply { put("status", 0) }, "id = ?", arrayOf(id.toString()))
                 }
