@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Hardware Example</string>
+    <string name="camera_text">Abrir Cámara</string>
+</resources>
