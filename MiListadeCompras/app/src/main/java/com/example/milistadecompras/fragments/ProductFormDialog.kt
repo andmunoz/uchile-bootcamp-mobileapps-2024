@@ -1,13 +1,23 @@
 package com.example.milistadecompras.fragments
 
+import android.app.Activity
 import android.app.Dialog
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Spinner
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.example.milistadecompras.R
 import com.example.milistadecompras.data.ProductItem
@@ -21,7 +31,9 @@ class ProductFormDialog: DialogFragment() {
     private lateinit var view: View
     private lateinit var productSpinner: Spinner
     private lateinit var productQuantity: EditText
+    private lateinit var productImageView: ImageView
     private lateinit var saveButton: Button
+    private lateinit var photoCameraButton: Button
 
     // Declaramos una lista de productos cargados en el spinner
     private lateinit var productList: MutableList<ProductItem>
@@ -44,6 +56,12 @@ class ProductFormDialog: DialogFragment() {
         saveButton = view.findViewById<Button>(R.id.save_product_button)
         saveButton.setOnClickListener {
             onSaveButtonClick(it)
+        }
+
+        // Referenciamos el botón de la cámara y le agregamos el listener
+        photoCameraButton = view.findViewById<Button>(R.id.photo_camera_button)
+        photoCameraButton.setOnClickListener {
+            onPhotoCameraButtonClick(it)
         }
 
         // Finalizamos la creación del dialog
@@ -96,6 +114,9 @@ class ProductFormDialog: DialogFragment() {
         // Obtenemos la cantidad del producto
         val quantity = productQuantity.text.toString().toInt()
 
+        // TODO: Obtener la imagen del producto y guardarlo en la base de datos
+        // val image = productImageView
+
         // Enviamos la información al fragment
         val listener = parentFragment as? OnProductAddedListener
         listener?.onProductAdded(selectedProduct, quantity)
@@ -103,6 +124,36 @@ class ProductFormDialog: DialogFragment() {
         // Cerramos el diálogo
         dismiss()
     }
+
+    // Función para manejar el botón de la cámara
+    private fun onPhotoCameraButtonClick(view: View) {
+        // Validamos el permiso de la cámara (si no está otorgado, lo solicitamos)
+        if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.CAMERA), 0)
+        }
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        // Si el permiso fue otorgado, abrimos la cámara
+        if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            // Abrimos la cámara y obtenemos la imagen resultante (foto)
+            startForResult.launch(Intent(MediaStore.ACTION_IMAGE_CAPTURE))
+        }
+    }
+
+    private val startForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val intent = result.data
+                val imageBitmap = intent?.extras?.get("data") as Bitmap
+                productImageView.setImageBitmap(imageBitmap)
+            }
+        }
 
     // Interface de comunicación para enviar el producto seleccionado al fragment
     interface OnProductAddedListener {
