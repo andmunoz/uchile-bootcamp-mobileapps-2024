@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Broadcast Example</string>
+    <string name="broadcast_text">Type a message to broadcast</string>
+    <string name="broadcast_button">Broadcast!</string>
+</resources>
