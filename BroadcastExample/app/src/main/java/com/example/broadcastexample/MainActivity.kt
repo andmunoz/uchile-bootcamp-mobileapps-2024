@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
-        super.onResume()
+        super.onResume()K
         Log.d("StaticReceiver", "Registrando...")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             registerReceiver(

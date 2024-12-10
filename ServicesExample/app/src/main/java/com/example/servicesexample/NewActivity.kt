@@ -103,7 +103,7 @@ class NewActivity : AppCompatActivity() {
     fun onSaveElementWithRetrofit() {
         // Creamos y abrimo la conexión al endpoint
         val endpoint = endpointInput.text.toString()
-        val webServiceController = WebServiceController(endpoint)
+        val webServiceController = WebServiceController(endpoint, "")
 
         // Obtener los valores de los campos de entrada
         val title = titleInput.text.toString()

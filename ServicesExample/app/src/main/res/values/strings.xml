@@ -9,4 +9,5 @@
     <string name="user_id">ID de Usuario</string>
     <string name="body">Contenido</string>
     <string name="getter_value">Tipo</string>
+    <string name="jwt_token">JWT Token (opcional)</string>
 </resources>

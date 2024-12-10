@@ -40,7 +40,7 @@
         android:layout_marginTop="12dp"
         android:text="@string/retreive_data"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/getter_spinner" />
+        app:layout_constraintTop_toBottomOf="@+id/token_input" />
 
     <Button
         android:id="@+id/new_button"
@@ -50,7 +50,7 @@
         android:layout_marginEnd="12dp"
         android:text="@string/create_new"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/getter_spinner" />
+        app:layout_constraintTop_toBottomOf="@+id/token_input" />
 
     <EditText
         android:id="@+id/json_response_text"
@@ -68,5 +68,19 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/load_button" />
+
+    <EditText
+        android:id="@+id/token_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="12dp"
+        android:ems="10"
+        android:hint="@string/jwt_token"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/getter_spinner" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

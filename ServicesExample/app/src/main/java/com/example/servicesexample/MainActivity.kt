@@ -2,6 +2,7 @@ package com.example.servicesexample
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Base64InputStream
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Button
@@ -22,12 +23,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 // Definimos la URL Base de la API
-const val BASE_URL = "https://jsonplaceholder.typicode.com/"
+const val BASE_URL = "http://10.0.2.2:8000/api/"
 
 class MainActivity : AppCompatActivity() {
     // Declaramos los widgets de la vista
     private lateinit var endpointInput: EditText
     private lateinit var getterSpinner: Spinner
+    private lateinit var tokenInput: EditText
     private lateinit var jsonResponseText: EditText
     private lateinit var loadButton: Button
     private lateinit var newButton: Button
@@ -47,6 +49,7 @@ class MainActivity : AppCompatActivity() {
 
         // Inicializamos los widgets
         endpointInput = findViewById(R.id.endpoint_input)
+        tokenInput = findViewById(R.id.token_input)
         getterSpinner = findViewById(R.id.getter_spinner)
         jsonResponseText = findViewById(R.id.json_response_text)
         loadButton = findViewById(R.id.load_button)
@@ -88,13 +91,13 @@ class MainActivity : AppCompatActivity() {
         val webServiceHelper = WebServiceHelper(endpoint)
 
         // Ponemos un estado de carga en el texto de respuesta
-        jsonResponseText.setText("Cargando datos de la URL: $endpoint/$service")
+        with(jsonResponseText) { setText("Cargando datos de la URL: $endpoint/$service") }
 
         // Llamamos a la función de manera asíncrona para obtener los datos del endpoint
         CoroutineScope(Dispatchers.IO).launch {
             val response = webServiceHelper.sendGETRequest(service)
             withContext(Dispatchers.Main) {
-                jsonResponseText.setText(response)
+                with(jsonResponseText) { setText(response) }
             }
             Log.d("HttpURLConnection", response.toString())
         }
@@ -103,10 +106,12 @@ class MainActivity : AppCompatActivity() {
     fun onLoadFromRetrofit() {
         // Obtenemos la URL del endpoint
         val endpoint = endpointInput.text.toString()
-        val webServiceController = WebServiceController(endpoint)
+        val token = tokenInput.text.toString()
+        val webServiceController = WebServiceController(endpoint, token)
 
         // Ponemos un estado de carga en el texto de respuesta
-        jsonResponseText.setText("Cargando datos de la URL: $endpoint")
+        with(jsonResponseText) { setText("Cargando datos de la URL: $endpoint") }
+        Log.d("Retrofit", "Cargando datos de la URL: $endpoint")
 
         // Llamamos a la función de manera asíncrona para obtener los datos del endpoint
         CoroutineScope(Dispatchers.IO).launch {
@@ -114,16 +119,18 @@ class MainActivity : AppCompatActivity() {
                 val response = webServiceController.getPosts()
                 if (response.isSuccessful) {
                     val posts = response.body()
+                    Log.d("Retrofit", posts.toString())
                     withContext(Dispatchers.Main) {
-                        jsonResponseText.setText(posts.toString())
+                        with(jsonResponseText) { setText(posts.toString()) }
                     }
                 }
                 else {
-                    jsonResponseText.setText("Error al cargar los datos de la URL: ${response.code()}")
+                    with(jsonResponseText) { setText("Error al cargar los datos de la URL: ${response.code()}") }
                 }
                 Log.d("Retrofit", response.toString())
             } catch (e: Exception) {
-                jsonResponseText.setText("Error al procesar el servicio: ${e.message}")
+                with(jsonResponseText) { setText("Error al procesar el servicio: ${e.localizedMessage}") }
+                e.localizedMessage?.let { Log.d("Retrofit", it.toString()) }
             }
         }
     }
@@ -134,11 +141,11 @@ class MainActivity : AppCompatActivity() {
         val webServiceQueue = WebServiceQueue(endpoint, this)
 
         // Ponemos un estado de carga en el texto de respuesta
-        jsonResponseText.setText("Cargando datos de la URL: $endpoint")
+        with(jsonResponseText) { setText("Cargando datos de la URL: $endpoint") }
 
         // Llamamos a la función de manera asíncrona para obtener los datos del endpoint
         webServiceQueue.getData("posts", { response ->
-            jsonResponseText.setText(response)
+            with(jsonResponseText) { setText(response) }
         })
     }
 }
